@@ -8,16 +8,25 @@ const LineChartContainer = () => {
     { value: 'AAPL', label: 'AAPL' },
   ];
 
+  const displayOptions = [
+    { value: 'day', label: 'day' },
+    { value: 'hours', label: 'hours' }
+  ];
+
   const [chartData, setChartData] = useState([]);
   const [selectedStock, setSelectedStock] = useState(stockOtions[0]);
-  const [displayType, setDisplayType] = useState('days');
+  const [displayType, setDisplayType] = useState(displayOptions[0]);
   
   const handleStockChange = (event) => {
     setSelectedStock({...event});
   };
 
+  const handleDisplayChange = (event) => {
+    setDisplayType({...event});
+  };
+
   const fetchChartData = () => {
-    fetch(`http://localhost:3001/share_chart?symbol=${selectedStock.value}&display_type=${displayType}`)
+    fetch(`http://localhost:3001/share_chart?symbol=${selectedStock.value}&display_type=${displayType.value}`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -34,7 +43,7 @@ const LineChartContainer = () => {
   
   useEffect (() => {
     fetchChartData();
-  }, [selectedStock]);
+  }, [selectedStock, displayType]);
 
   return (
     <LineChartComponent
@@ -42,6 +51,9 @@ const LineChartContainer = () => {
       handleStockChange={handleStockChange}
       selectedStock={selectedStock}
       stockOtions={stockOtions}
+      displayOptions={displayOptions}
+      handleDisplayChange={handleDisplayChange}
+      displayType={displayType}
     />
   );
 };

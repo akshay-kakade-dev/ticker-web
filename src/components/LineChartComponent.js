@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import { Row, Col } from 'reactstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 // const CustomFormatter = (value, name, props) => [value, name.replace(/_/g, ' '), props];
@@ -10,16 +11,37 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 //   props
 // ];
 
-const LineChartComponent = ({data, handleStockChange, selectedStock, stockOtions}) => {
-  console.log(data);
+const LineChartComponent = (props) => {
+  const {
+    data,
+    handleStockChange,
+    selectedStock,
+    stockOtions,
+    displayType,
+    displayOptions,
+    handleDisplayChange,
+  } = props
+
+  console.log(props);
   
   return (
     <>
-      <Select
-        value={selectedStock}
-        onChange={handleStockChange}
-        options={stockOtions}
-      />
+      <Row>
+        <Col md="6">
+          <Select
+            value={selectedStock}
+            onChange={handleStockChange}
+            options={stockOtions}
+          />
+        </Col>
+        <Col md="6">
+          <Select
+            value={displayType}
+            onChange={handleDisplayChange}
+            options={displayOptions}
+          />
+        </Col>
+      </Row>
       <LineChart width={500} height={300} data={data}>
         <XAxis dataKey="x"/>
         <YAxis/>
