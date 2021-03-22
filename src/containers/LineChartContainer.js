@@ -13,8 +13,7 @@ const LineChartContainer = () => {
   const [displayType, setDisplayType] = useState('days');
   
   const handleStockChange = (event) => {
-    setSelectedStock(event);
-    fetchChartData();
+    setSelectedStock({...event});
   };
 
   const fetchChartData = () => {
@@ -33,9 +32,9 @@ const LineChartContainer = () => {
     )
   };
   
-  useEffect(() => {
+  useEffect (() => {
     fetchChartData();
-  }, []);
+  }, [selectedStock]);
 
   return (
     <LineChartComponent
