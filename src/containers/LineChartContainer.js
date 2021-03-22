@@ -1,26 +1,50 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-
+import React, { useEffect, useState } from 'react';
 import LineChartComponent from '../components/LineChartComponent';
 
-const LineChartContainer = ({ chartData, headerName, businessVal }) => {
-  const { isLoading } = useSelector((state) => state.dashboardReducer);
-  const { data, keys } = chartData;
+const LineChartContainer = () => {
+  const stockOtions = [
+    { value: 'MSFT', label: 'MSFT' },
+    { value: 'AMZN', label: 'AMZN' },
+    { value: 'AAPL', label: 'AAPL' },
+  ];
+
+  const [chartData, setChartData] = useState([]);
+  const [selectedStock, setSelectedStock] = useState(stockOtions[0]);
+  const [displayType, setDisplayType] = useState('days');
+  
+  const handleStockChange = (event) => {
+    setSelectedStock(event);
+    fetchChartData();
+  };
+
+  const fetchChartData = () => {
+    fetch(`http://localhost:3001/share_chart?symbol=${selectedStock.value}&display_type=${displayType}`)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setChartData(result.data);
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      (error) => {
+        
+      }
+    )
+  };
+  
+  useEffect(() => {
+    fetchChartData();
+  }, []);
+
   return (
     <LineChartComponent
-      data={data}
-      keys={keys}
-      headerName={headerName}
-      isLoading={isLoading}
-      businessVal={businessVal}
+      data={chartData}
+      handleStockChange={handleStockChange}
+      selectedStock={selectedStock}
+      stockOtions={stockOtions}
     />
   );
 };
 
-LineChartContainer.propTypes = {
-  chartData: PropTypes.object.isRequired,
-  headerName: PropTypes.string,
-  businessVal: PropTypes.string
-};
 export default LineChartContainer;

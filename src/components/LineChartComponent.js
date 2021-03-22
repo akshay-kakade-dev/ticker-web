@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
+import Select from 'react-select';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 // const CustomFormatter = (value, name, props) => [value, name.replace(/_/g, ' '), props];
 // const MaterialtootlipFormatter = (value, name, props) => [
@@ -9,15 +10,25 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 //   props
 // ];
 
-const LineChartComponent = ({ data }) => {
+const LineChartComponent = ({data, handleStockChange, selectedStock, stockOtions}) => {
+  console.log(data);
+  
   return (
-    <LineChart width={500} height={300} data={data}>
-      <XAxis dataKey="name"/>
-      <YAxis/>
-      <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-      <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-      <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-    </LineChart>
+    <>
+      <Select
+        value={selectedStock}
+        onChange={handleStockChange}
+        options={stockOtions}
+      />
+      <LineChart width={500} height={300} data={data}>
+        <XAxis dataKey="x"/>
+        <YAxis/>
+        <Tooltip />
+        <Legend />
+        <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+        <Line type="monotone" dataKey="price" stroke="#82ca9d" />
+      </LineChart>
+    </>
   );
 };
 
